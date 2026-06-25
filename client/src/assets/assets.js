@@ -14,6 +14,7 @@ import pp7 from './profile-pic-3.jpg'
 import gallery_icon from './g-icon.png'
 import send_button from './sb.png'
 import mi from './m-i.jpg'
+import logo_big from './logo_big.jpg'
 
 
 const assets = {
@@ -32,6 +33,7 @@ const assets = {
     pp7,
     gallery_icon,
     send_button,
+    logo_big
     
 }
 export const imagesDummyData = [
