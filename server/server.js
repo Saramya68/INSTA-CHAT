@@ -1,11 +1,16 @@
+
+console.log("cloudinary.js is running");
+import "dotenv/config";
+console.log(process.env.CLOUDINARY_CLOUD_NAME);
+console.log(process.env.CLOUDINARY_API_KEY);
+console.log(process.env.CLOUDINARY_API_SECRET);
 import express from "express";
-import dotenv from "dotenv";
-dotenv.config();
 import cors from "cors";
 import http from "http";
 import { connectDB } from "./lib/db.js";
 import userRouter from "./routes/userRoutes.js";
 import messageRouter from "./routes/messageRoutes.js";
+import cloudinary from "./lib/cloudinary.js";
 import { Server } from "socket.io";
 const app = express();
 const server = http.createServer(app);
@@ -19,6 +24,7 @@ export const io = new Server(server, {
         origin: "*"
     }
 });
+
 
 // Store online users
 export const userSocketMap = {}; // { userId: socketId }
@@ -48,7 +54,7 @@ io.on("connection", (socket) => {
 app.use("/api/status", (req, res) => {
     res.send("server is live");
 });
-app.use('/api/status',userRouter)
+app.use('/api/auth',userRouter)
 app.use('/api/messages',messageRouter)
 
 // Port
