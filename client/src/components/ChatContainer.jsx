@@ -109,54 +109,62 @@ const ChatContainer = () => {
 
       <div className="flex flex-col h-[calc(100%-120px)] overflow-y-scroll p-3 pb-6">
   {messages.map((msg, index) => {
-    const isMyMessage =
-      msg.senderId?.toString() === authUser?._id?.toString();
+  const isMyMessage =
+    msg.senderId?.toString() === authUser?._id?.toString();
 
-    return (
+  return (
+    <div
+      key={index}
+      className={`flex mb-4 ${
+        isMyMessage ? "justify-end" : "justify-start"
+      }`}
+    >
+      {!isMyMessage && (
+        <img
+          src={selectedUser?.profilePic || assets.avatar_icon}
+          className="w-8 h-8 rounded-full mr-2 self-end"
+          alt=""
+        />
+      )}
+
       <div
-        key={index}
-        className={`flex items-end gap-2 mb-4 ${
-          isMyMessage
-            ? "justify-end"
-            : "justify-start flex-row-reverse"
-        }`}
+        className={`max-w-[70%] ${
+          isMyMessage ? "items-end" : "items-start"
+        } flex flex-col`}
       >
         {msg.image ? (
           <img
             src={msg.image}
+            className="max-w-[220px] rounded-lg"
             alt=""
-            className="max-w-[230px] rounded-lg border border-gray-700"
           />
         ) : (
-          <p
-            className={`p-2 max-w-[220px] text-white text-sm break-words rounded-lg ${
+          <div
+            className={`px-4 py-2 rounded-lg text-white ${
               isMyMessage
                 ? "bg-violet-500 rounded-br-none"
                 : "bg-gray-700 rounded-bl-none"
             }`}
           >
             {msg.text}
-          </p>
+          </div>
         )}
 
-        <div className="text-center text-xs">
-          <img
-            src={
-              isMyMessage
-                ? authUser?.profilePic || assets.avatar_icon
-                : selectedUser?.profilePic || assets.avatar_icon
-            }
-            alt=""
-            className="w-7 h-7 rounded-full"
-          />
-
-          <p className="text-gray-400">
-            {formatMessageTime(msg.createdAt)}
-          </p>
-        </div>
+        <span className="text-xs text-gray-400 mt-1">
+          {formatMessageTime(msg.createdAt)}
+        </span>
       </div>
-    );
-  })}
+
+      {isMyMessage && (
+        <img
+          src={authUser?.profilePic || assets.avatar_icon}
+          className="w-8 h-8 rounded-full ml-2 self-end"
+          alt=""
+        />
+      )}
+    </div>
+  );
+})}
 
   <div ref={scrollEnd}></div>
 </div>

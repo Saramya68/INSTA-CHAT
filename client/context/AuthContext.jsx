@@ -86,7 +86,6 @@ const updateProfile = async (body) => {
 const connectSocket = (userData) => {
     if (!userData) return;
 
-    // Disconnect previous socket if any
     if (socket) {
         socket.disconnect();
     }
@@ -95,9 +94,14 @@ const connectSocket = (userData) => {
         query: {
             userId: userData._id,
         },
+        transports: ["websocket"],
     });
 
     setSocket(newSocket);
+
+    newSocket.on("connect", () => {
+        console.log("Socket Connected:", newSocket.id);
+    });
 
     newSocket.on("getOnlineUsers", (userIds) => {
         console.log("Online Users:", userIds);
