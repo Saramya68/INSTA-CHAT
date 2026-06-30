@@ -50,16 +50,20 @@ export const AuthProvider=({children})=>{
     }
 };
 // logout function function to handle user logout socket disconnection 
-const logout=async()=>{
-    localStorage.removeItem('token')
-    setToken(null)
-    setAuthUser(null)
-    setOnlineUsers([])
-    axios.defaults.headers.common["token"] =null
-    toast.success('logged out successfully')
-    socket?.disconnect()
-    
-}
+const logout = () => {
+    socket?.disconnect();
+
+    setSocket(null);
+    setAuthUser(null);
+    setOnlineUsers([]);
+    setToken(null);
+
+    delete axios.defaults.headers.common["token"];
+
+    localStorage.removeItem("token");
+
+    toast.success("Logged out successfully");
+};
 // Update profile function to handle user profile updates
 const updateProfile = async (body) => {
     try {
@@ -80,7 +84,12 @@ const updateProfile = async (body) => {
 };
 // Connect socket function to handle socket connection and online users updates
 const connectSocket = (userData) => {
-    if (!userData || socket?.connected) return;
+    if (!userData) return;
+
+    // Disconnect previous socket if any
+    if (socket) {
+        socket.disconnect();
+    }
 
     const newSocket = io(backendUrl, {
         query: {
@@ -88,11 +97,10 @@ const connectSocket = (userData) => {
         },
     });
 
-    newSocket.connect();
-
     setSocket(newSocket);
 
     newSocket.on("getOnlineUsers", (userIds) => {
+        console.log("Online Users:", userIds);
         setOnlineUsers(userIds);
     });
 };
