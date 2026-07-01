@@ -63,14 +63,6 @@ const ChatContainer = () => {
     }
 }, [selectedUser, getMessages]);
 
-  // Auto scroll
-  useEffect(() => {
-    if (scrollEnd.current) {
-      scrollEnd.current.scrollIntoView({
-        behavior: "smooth",
-      });
-    }
-  }, [messages]);
 
   return selectedUser ? (
     <div className="h-full overflow-y-scroll relative backdrop-blur-lg">
@@ -143,7 +135,7 @@ const ChatContainer = () => {
             className={`px-4 py-2 rounded-lg text-white ${
               isMyMessage
                 ? "bg-violet-500 rounded-br-none"
-                : "bg-gray-700 rounded-bl-none"
+                : "bg-violet-500 rounded-bl-none"
             }`}
           >
             {msg.text}
@@ -194,10 +186,10 @@ const ChatContainer = () => {
 
           <label htmlFor="image">
             <img
-              src={assets.gallery_icon}
-              alt=""
-              className="w-5 cursor-pointer mr-2"
-            />
+          src={assets.gallery_icon}
+           alt=""
+            className="w-8 h-8 cursor-pointer mr-2"
+       />
           </label>
         </div>
 

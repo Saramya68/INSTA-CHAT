@@ -40,10 +40,10 @@ const LoginPage = () => {
       {/* -------- Left Side -------- */}
 
       <img
-        src={assets.logo_big}
-        alt=""
-        className="w-[min(30vw,250px)]"
-      />
+  src={assets.logo_big}
+  alt="Logo"
+  className="w-[min(30vw,250px)] aspect-square rounded-full object-cover overflow-hidden"
+/>
 
       {/* -------- Right Side -------- */}
 

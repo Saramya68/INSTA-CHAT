@@ -1,11 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-import logo from "../assets/logo.jpg";
-import menuIcon from "../assets/menu_logo.svg";
-import SearchIcon from "../assets/searchicon.png";
 import assets from "../assets/assets";
-
 import { AuthContext } from "../../context/AuthContext";
 import { ChatContext } from "../../context/ChatContext";
 
@@ -47,14 +42,14 @@ const Sidebar = () => {
       <div className="pb-5">
         <div className="flex justify-between items-center">
           <img
-            src={logo}
+            src={assets.logo}
             alt="logo"
             className="w-12 h-12 object-contain"
           />
 
           <div className="relative py-2 group">
             <img
-              src={menuIcon}
+              src={assets.menu_icon}
               alt="menu"
               className="max-h-5 cursor-pointer"
             />
@@ -82,7 +77,7 @@ const Sidebar = () => {
         {/* Search Box */}
         <div className="bg-[#282142] rounded-full flex items-center gap-2 py-3 px-4 mt-5">
           <img
-            src={SearchIcon}
+            src={assets.search_icon}
             alt="search"
             className="w-3"
           />
