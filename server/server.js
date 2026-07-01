@@ -1,9 +1,4 @@
-
-console.log("cloudinary.js is running");
 import "dotenv/config";
-console.log(process.env.CLOUDINARY_CLOUD_NAME);
-console.log(process.env.CLOUDINARY_API_KEY);
-console.log(process.env.CLOUDINARY_API_SECRET);
 import express from "express";
 import cors from "cors";
 import http from "http";
@@ -56,13 +51,16 @@ app.use("/api/status", (req, res) => {
 });
 app.use('/api/auth',userRouter)
 app.use('/api/messages',messageRouter)
-
-// Port
-const PORT = process.env.PORT || 5000;
-console.log(JSON.stringify(process.env.MONGODB_URI));
 await connectDB()
 
-// Start Server
-server.listen(PORT, () => {
-    console.log(`Server is running on port: ${PORT}`);
-});
+// Port
+if (process.env.NODE_ENV !== "production") {
+  const PORT = process.env.PORT || 5000;
+
+  server.listen(PORT, () =>
+    console.log("Server is running on PORT: " + PORT)
+  );
+}
+
+// Export server for Vercel
+export default server;
