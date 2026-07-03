@@ -3,8 +3,11 @@ import { useNavigate } from "react-router-dom";
 import assets from "../assets/assets";
 import { AuthContext } from "../../context/AuthContext";
 import { ChatContext } from "../../context/ChatContext";
+import { ThemeContext } from "../../context/ThemeContext";
+
 
 const Sidebar = () => {
+  const { darkMode } = useContext(ThemeContext);
   const {
     getUsers,
     users,
@@ -26,6 +29,34 @@ const Sidebar = () => {
         user.fullName.toLowerCase().includes(input.toLowerCase())
       )
     : users;
+  // Theme Classes
+const sidebarBg = darkMode
+  ? "bg-[#8185B2]/10"
+  : "bg-white";
+
+const searchBg = darkMode
+  ? "bg-[#282142]"
+  : "bg-gray-200";
+
+const textColor = darkMode
+  ? "text-white"
+  : "text-gray-900";
+
+const subText = darkMode
+  ? "text-gray-400"
+  : "text-gray-600";
+
+const selectedBg = darkMode
+  ? "bg-[#282142]/50"
+  : "bg-blue-100";
+
+const menuBg = darkMode
+  ? "bg-[#282142] border-gray-600 text-white"
+  : "bg-white border-gray-300 text-gray-900";
+
+const inputClass = darkMode
+  ? "text-white placeholder-gray-300"
+  : "text-gray-900 placeholder-gray-500";
 
   // Fetch users whenever online users change
   useEffect(() => {
@@ -34,7 +65,7 @@ const Sidebar = () => {
 
   return (
     <div
-      className={`bg-[#8185B2]/10 h-full p-5 rounded-r-xl overflow-y-scroll text-white ${
+      className={`${sidebarBg} h-full p-5 rounded-r-xl overflow-y-scroll transition-all duration-300  ${
         selectedUser ? "max-md:hidden" : ""
       }`}
     >
@@ -54,7 +85,7 @@ const Sidebar = () => {
               className="max-h-5 cursor-pointer"
             />
 
-            <div className="absolute top-full right-0 z-20 w-32 p-5 rounded-md bg-[#282142] border border-gray-600 text-gray-100 hidden group-hover:block">
+            <div className={`absolute top-full right-0 z-20 w-32 p-5 rounded-md border hidden group-hover:block ${menuBg}`}>
               <p
                 onClick={() => navigate("/profile")}
                 className="cursor-pointer text-sm"
@@ -75,7 +106,7 @@ const Sidebar = () => {
         </div>
 
         {/* Search Box */}
-        <div className="bg-[#282142] rounded-full flex items-center gap-2 py-3 px-4 mt-5">
+        <div className={`${searchBg} rounded-full flex items-center gap-2 py-3 px-4 mt-5 transition-all duration-300`}>
           <img
             src={assets.search_icon}
             alt="search"
@@ -87,7 +118,7 @@ const Sidebar = () => {
             placeholder="Search User..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            className="bg-transparent border-none outline-none text-white text-xs placeholder-[#c8c8c8] flex-1"
+            className={`bg-transparent border-none outline-none text-xs flex-1 ${inputClass}`}
           />
         </div>
       </div>
@@ -110,8 +141,8 @@ const Sidebar = () => {
             }}
             className={`relative flex items-center gap-2 p-2 pl-4 rounded cursor-pointer max-sm:text-sm ${
               selectedUser?._id === user._id
-                ? "bg-[#282142]/50"
-                : ""
+               ? selectedBg
+                 : ""
             }`}
           >
             <img
@@ -121,14 +152,14 @@ const Sidebar = () => {
             />
 
             <div className="flex flex-col leading-5">
-              <p>{user.fullName}</p>
+              <p className={textColor}>{user.fullName}</p>
 
               {onlineUsers.includes(user._id) ? (
-                <span className="text-green-400 text-xs">
+                <span className="text-green-500 text-xs">
                   Online
                 </span>
               ) : (
-                <span className="text-neutral-400 text-xs">
+                <span className={`${subText} text-xs`}>
                   Offline
                 </span>
               )}

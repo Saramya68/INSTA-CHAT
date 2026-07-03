@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { formatMessageTime } from "../lib/utils";
 import { ChatContext } from "../../context/ChatContext";
 import { AuthContext } from "../../context/AuthContext";
-
+import { ThemeContext } from "../../context/ThemeContext";
 const ChatContainer = () => {
   const {
     messages,
@@ -16,10 +16,26 @@ const ChatContainer = () => {
   } = useContext(ChatContext);
 
   const { authUser, onlineUsers } = useContext(AuthContext);
-
+  const { darkMode } = useContext(ThemeContext);
   const scrollEnd = useRef(null);
-
   const [input, setInput] = useState("");
+const chatBg = darkMode ? "bg-transparent" : "bg-white";
+
+const textColor = darkMode ? "text-white" : "text-gray-900";
+
+const subText = darkMode ? "text-gray-400" : "text-gray-600";
+
+const inputBg = darkMode
+  ? "bg-gray-100/10"
+  : "bg-gray-200";
+
+const inputText = darkMode
+  ? "text-white placeholder-gray-400"
+  : "text-gray-900 placeholder-gray-500";
+
+const borderColor = darkMode
+  ? "border-stone-500"
+  : "border-gray-300";
 
   // Handle sending a text message
   const handleSendMessage = async (e) => {
@@ -65,17 +81,17 @@ const ChatContainer = () => {
 
 
   return selectedUser ? (
-    <div className="h-full overflow-y-scroll relative backdrop-blur-lg">
+    <div className={`h-full overflow-y-scroll relative ${chatBg}`}>
       {/* Header */}
 
-      <div className="flex items-center gap-3 py-3 mx-4 border-b border-stone-500">
+      <div className={`flex items-center gap-3 py-3 mx-4 border-b ${borderColor}`}>
         <img
           src={selectedUser.profilePic || assets.avatar_icon}
           alt=""
           className="w-8 rounded-full"
         />
 
-        <p className="flex-1 text-lg text-white flex items-center gap-2">
+        <p className={`flex-1 text-lg flex items-center gap-2 ${textColor}`}>
           {selectedUser.fullName}
 
           {onlineUsers.includes(selectedUser._id) && (
@@ -142,7 +158,7 @@ const ChatContainer = () => {
           </div>
         )}
 
-        <span className="text-xs text-gray-400 mt-1">
+        <span className={`text-xs mt-1 ${subText}`}>
           {formatMessageTime(msg.createdAt)}
         </span>
       </div>
@@ -164,11 +180,11 @@ const ChatContainer = () => {
       {/* Bottom */}
 
       <div className="absolute bottom-0 left-0 right-0 flex items-center gap-3 p-3">
-        <div className="flex-1 flex items-center bg-gray-100/10 rounded-full px-3">
+        <div className={`flex-1 flex items-center rounded-full px-3 ${inputBg}`}>
           <input
             type="text"
             placeholder="Send a message"
-            className="flex-1 bg-transparent outline-none text-white p-3 placeholder-gray-400"
+           className={`flex-1 bg-transparent outline-none p-3 ${inputText}`}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) =>
@@ -202,13 +218,24 @@ const ChatContainer = () => {
       </div>
     </div>
   ) : (
-    <div className="flex flex-col items-center justify-center gap-2 text-gray-500 bg-white/10 max-md:hidden">
-      <img src={assets.logo} alt="" className="max-w-16" />
+    <div
+  className={`flex flex-col items-center justify-center gap-2 max-md:hidden ${
+    darkMode
+      ? "bg-white/10 text-gray-400"
+      : "bg-gray-100 text-gray-600"
+  }`}
+>
+  <img src={assets.logo} alt="" className="max-w-16" />
 
-      <p className="text-lg font-medium text-white">
-        Chat anytime, anywhere
-      </p>
-    </div>
+  <p
+    className={`text-lg font-medium ${
+      darkMode ? "text-white" : "text-gray-800"
+    }`}
+  >
+    Chat anytime, anywhere
+  </p>
+</div>
+    
   );
 };
 

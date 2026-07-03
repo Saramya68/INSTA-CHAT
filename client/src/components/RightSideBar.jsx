@@ -2,11 +2,36 @@ import React, { useContext, useState,useEffect } from "react";
 import assets from "../assets/assets";
 import { ChatContext } from "../../context/ChatContext";
 import { AuthContext } from "../../context/AuthContext";
-
+import { ThemeContext } from "../../context/ThemeContext";
 const RightSidebar = () => {
   const {selectedUser,messages}=useContext(ChatContext)
   const {logout,onlineUsers}=useContext(AuthContext)
   const [msgImgs,setMsgImgs]=useState([])
+  const { darkMode } = useContext(ThemeContext);
+  // Theme Classes
+const sidebarBg = darkMode
+  ? "bg-[#8185B2]/10 text-white"
+  : "bg-white text-gray-900";
+
+const titleColor = darkMode
+  ? "text-white"
+  : "text-gray-900";
+
+const subText = darkMode
+  ? "text-gray-300"
+  : "text-gray-600";
+
+const divider = darkMode
+  ? "border-[#ffffff50]"
+  : "border-gray-300";
+
+const mediaTitle = darkMode
+  ? "text-white"
+  : "text-gray-900";
+
+const logoutBtn = darkMode
+  ? "from-purple-400 to-violet-600"
+  : "from-blue-500 to-blue-700";
   // Get all the images from the messages and set them to state
 useEffect(() => {
     setMsgImgs(
@@ -19,7 +44,7 @@ useEffect(() => {
     selectedUser && (
 
       <div
-        className={`bg-[#8185B2]/10 text-white w-full relative overflow-y-scroll ${
+        className={`${sidebarBg} w-full relative overflow-y-scroll transition-all duration-300 ${
           selectedUser ? "max-md:hidden" : ""
         }`}
       >
@@ -32,7 +57,9 @@ useEffect(() => {
             className="w-20 aspect-[1/1] rounded-full"
           />
 
-          <h1 className="px-10 text-xl font-medium mx-auto flex items-center gap-2">
+           <h1
+className={`px-10 text-xl font-medium mx-auto flex items-center gap-2 ${titleColor}`}
+>
 
 {onlineUsers.includes(selectedUser._id) && (
     <p className="w-2 h-2 rounded-full bg-green-500"></p>
@@ -41,17 +68,17 @@ useEffect(() => {
 
           </h1>
 
-          <p className="px-10 mx-auto">
+          <p className={`px-10 mx-auto ${subText}`}>
             {selectedUser.bio}
           </p>
 
         </div>
 
-        <hr className="border-[#ffffff50] my-4" />
+       <hr className={`${divider} my-4`} />
 
         <div className="px-5 text-xs">
 
-          <p>Media</p>
+          <p className={mediaTitle}>Media</p>
 
           <div className="mt-2 max-h-[200px] overflow-y-scroll grid grid-cols-2 gap-4 opacity-80">
 
@@ -77,7 +104,7 @@ useEffect(() => {
 
         </div>
         <button onClick={()=>logout()}
-  className="absolute bottom-5 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-purple-400 to-violet-600 text-white border-none text-sm font-light py-2 px-20 rounded-full cursor-pointer"
+ className={`absolute bottom-5 left-1/2 transform -translate-x-1/2 bg-gradient-to-r ${logoutBtn} text-white border-none text-sm font-light py-2 px-20 rounded-full cursor-pointer hover:scale-105 transition-all duration-300`}
 >
   Logout
 </button>
