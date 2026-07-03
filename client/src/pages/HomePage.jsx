@@ -10,13 +10,13 @@ const HomePage = () => {
   const { darkMode, toggleTheme } = useContext(ThemeContext);
 
   return (
-    <div
-      className={`relative w-full h-screen sm:px-[15%] sm:py-[5%] transition-all duration-300 ${
-        darkMode
-          ? "bg-gradient-to-br from-slate-950 via-blue-900 to-sky-700"
-          : "bg-gradient-to-br from-sky-100 via-white to-blue-100"
-      }`}
-    >
+   <div
+  className={`relative w-full h-screen sm:px-[8%] sm:py-[2%] transition-all duration-300 ${
+    darkMode
+      ? "bg-gradient-to-br from-slate-950 via-blue-900 to-sky-700"
+      : "bg-gradient-to-br from-sky-100 via-white to-blue-100"
+  }`}
+>
       {/* Theme Toggle */}
       <div className="absolute top-5 right-5 z-50 flex flex-col items-center gap-1">
         <button

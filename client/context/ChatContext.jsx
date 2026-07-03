@@ -26,10 +26,31 @@ export const ChatProvider = ({ children }) => {
 
   // Get socket and axios from AuthContext
   const { socket, axios } = useContext(AuthContext);
+  const [typingUser, setTypingUser] = useState(null);
+
+useEffect(() => {
+  if (!socket) return;
+
+  socket.on("typing", ({ senderId }) => {
+    setTypingUser(senderId);
+  });
+
+  socket.on("stopTyping", ({ senderId }) => {
+    setTypingUser((prev) =>
+      prev === senderId ? null : prev
+    );
+  });
+
+  return () => {
+    socket.off("typing");
+    socket.off("stopTyping");
+  };
+}, [socket]);
 
   // ==========================
   // Get all users
   // ==========================
+
 
   const getUsers = async () => {
     try {
@@ -174,7 +195,8 @@ export const ChatProvider = ({ children }) => {
     sendMessage,
     setMessages,
     setSelectedUser,
-
+    
+     typingUser,
     unseenMessages,
     setUnseenMessages,
 

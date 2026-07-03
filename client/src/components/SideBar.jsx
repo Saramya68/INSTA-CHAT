@@ -15,6 +15,7 @@ const Sidebar = () => {
     setSelectedUser,
     unseenMessages,
     setUnseenMessages,
+    typingUser
   } = useContext(ChatContext);
 
   const { logout, onlineUsers } = useContext(AuthContext);
@@ -154,15 +155,19 @@ const inputClass = darkMode
             <div className="flex flex-col leading-5">
               <p className={textColor}>{user.fullName}</p>
 
-              {onlineUsers.includes(user._id) ? (
-                <span className="text-green-500 text-xs">
-                  Online
-                </span>
-              ) : (
-                <span className={`${subText} text-xs`}>
-                  Offline
-                </span>
-              )}
+              {typingUser === user._id ? (
+    <span className="text-blue-500 text-xs font-medium">
+        Typing...
+    </span>
+) : onlineUsers.includes(user._id) ? (
+    <span className="text-green-400 text-xs">
+        Online
+    </span>
+) : (
+    <span className="text-neutral-400 text-xs">
+        Offline
+    </span>
+)}
             </div>
 
             {unseenMessages[user._id] > 0 && (
