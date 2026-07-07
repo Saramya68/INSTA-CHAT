@@ -5,7 +5,7 @@ import { AuthContext } from "../../context/AuthContext";
 
 const LoginPage = () => {
   const [currState, setCurrState] = useState("Sign up");
-
+  const [isChecked, setIsChecked] = useState(false);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,20 +17,25 @@ const LoginPage = () => {
   const { login } = useContext(AuthContext);
 
   const onSubmitHandler = (event) => {
-    event.preventDefault();
+  event.preventDefault();
 
-    if (currState === "Sign up" && !isDataSubmitted) {
-      setIsDataSubmitted(true);
-      return;
-    }
+  if (!isChecked) {
+    alert("Please agree to the Terms of Use & Privacy Policy.");
+    return;
+  }
 
-    login(currState === "Sign up" ? "signup" : "login", {
-      fullName,
-      email,
-      password,
-      bio,
-    });
-  };
+  if (currState === "Sign up" && !isDataSubmitted) {
+    setIsDataSubmitted(true);
+    return;
+  }
+
+  login(currState === "Sign up" ? "signup" : "login", {
+    fullName,
+    email,
+    password,
+    bio,
+  });
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-900 to-sky-700 flex items-center justify-center gap-16 px-6 py-10 sm:justify-evenly max-sm:flex-col">
@@ -116,18 +121,24 @@ const LoginPage = () => {
 
         {/* Button */}
         <button
-          type="submit"
-          className="py-3 rounded-xl bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-700 text-white font-semibold text-lg hover:scale-[1.02] hover:shadow-lg transition-all duration-300 cursor-pointer"
-        >
-          {currState === "Sign up" ? "Create Account" : "Login Now"}
-        </button>
-
+  type="submit"
+  disabled={!isChecked}
+  className={`py-3 rounded-xl text-white font-semibold text-lg transition-all duration-300 ${
+    isChecked
+      ? "bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-700 cursor-pointer"
+      : "bg-gray-400 cursor-not-allowed"
+  }`}
+>
+  {currState === "Sign up" ? "Create Account" : "Login Now"}
+</button>
         {/* Terms */}
         <div className="flex items-center gap-3 text-sm text-slate-600">
           <input
-            type="checkbox"
-            className="accent-blue-600 w-4 h-4 cursor-pointer"
-          />
+  type="checkbox"
+  checked={isChecked}
+  onChange={(e) => setIsChecked(e.target.checked)}
+  className="accent-blue-600 w-4 h-4 cursor-pointer"
+/>
 
           <p>Agree to the terms of use & privacy policy.</p>
         </div>
