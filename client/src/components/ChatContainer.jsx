@@ -2,7 +2,7 @@
   import assets from "../assets/assets";
   import toast from "react-hot-toast";
 
-  import { formatMessageTime } from "../lib/utils";
+ import { formatMessageTime, formatChatDate } from "../lib/utils";
   import { ChatContext } from "../../context/ChatContext";
   import { AuthContext } from "../../context/AuthContext";
   import { ThemeContext } from "../../context/ThemeContext";
@@ -142,13 +142,32 @@
         {/* Chat Area */}
 
         <div className="flex flex-col h-[calc(100%-120px)] overflow-y-scroll p-3 pb-6">
-    {messages.map((msg, index) => {
-    const isMyMessage =
-      msg.senderId?.toString() === authUser?._id?.toString();
+   {messages.map((msg, index) => {
+  const isMyMessage =
+    msg.senderId?.toString() === authUser?._id?.toString();
 
-    return (
+  const showDate =
+    index === 0 ||
+    formatChatDate(messages[index - 1].createdAt) !==
+      formatChatDate(msg.createdAt);
+
+  return (
+    <React.Fragment key={index}>
+      {showDate && (
+        <div className="flex justify-center my-4">
+          <div
+            className={`px-4 py-1 rounded-full text-xs ${
+              darkMode
+                ? "bg-gray-700 text-white"
+                : "bg-gray-300 text-gray-800"
+            }`}
+          >
+            {formatChatDate(msg.createdAt)}
+          </div>
+        </div>
+      )}
+
       <div
-        key={index}
         className={`flex mb-4 ${
           isMyMessage ? "justify-end" : "justify-start"
         }`}
@@ -197,8 +216,9 @@
           />
         )}
       </div>
-    );
-  })}
+    </React.Fragment>
+  );
+})}
 
     <div ref={scrollEnd}></div>
   </div>
