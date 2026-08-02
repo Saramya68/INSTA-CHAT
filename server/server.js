@@ -5,8 +5,10 @@ import http from "http";
 import { connectDB } from "./lib/db.js";
 import userRouter from "./routes/userRoutes.js";
 import messageRouter from "./routes/messageRoutes.js";
+import callRouter from "./routes/callRoutes.js";
 import cloudinary from "./lib/cloudinary.js";
 import { Server } from "socket.io";
+import setupVideoCallSocket from "./socket/videoCall.js";
 const app = express();
 const server = http.createServer(app);
 
@@ -33,6 +35,10 @@ io.on("connection", (socket) => {
     if (userId) {
         userSocketMap[userId] = socket.id;
     }
+    
+    // Initialize Video Calling socket handlers
+    setupVideoCallSocket(io, socket, userSocketMap);
+
     // Emit online users to all connected clients
      io.emit("getOnlineUsers", Object.keys(userSocketMap));
      socket.on("typing", ({ receiverId }) => {
@@ -68,8 +74,10 @@ socket.on("stopTyping", ({ receiverId }) => {
 app.use("/api/status", (req, res) => {
     res.send("server is live");
 });
+
 app.use('/api/auth',userRouter)
 app.use('/api/messages',messageRouter)
+app.use('/api/calls',callRouter)
 await connectDB()
 
 // Port

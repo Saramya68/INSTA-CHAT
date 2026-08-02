@@ -4,6 +4,7 @@ import assets from "../assets/assets";
 import { AuthContext } from "../../context/AuthContext";
 import { ChatContext } from "../../context/ChatContext";
 import { ThemeContext } from "../../context/ThemeContext";
+import CallHistory from "./CallHistory";
 
 
 const Sidebar = () => {
@@ -23,6 +24,7 @@ const Sidebar = () => {
   const navigate = useNavigate();
 
   const [input, setInput] = useState("");
+  const [activeTab, setActiveTab] = useState("chats"); // "chats" | "calls"
 
   // Filter users based on search input
   const filteredUsers = input.trim()
@@ -71,7 +73,7 @@ const inputClass = darkMode
       }`}
     >
       {/* Top Section */}
-      <div className="pb-5">
+      <div className="pb-3">
         <div className="flex justify-between items-center">
           <img
             src={assets.logo}
@@ -106,78 +108,108 @@ const inputClass = darkMode
           </div>
         </div>
 
-        {/* Search Box */}
-        <div className={`${searchBg} rounded-full flex items-center gap-2 py-3 px-4 mt-5 transition-all duration-300`}>
-          <img
-            src={assets.search_icon}
-            alt="search"
-            className="w-3"
-          />
-
-          <input
-            type="text"
-            placeholder="Search User..."
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            className={`bg-transparent border-none outline-none text-xs flex-1 ${inputClass}`}
-          />
-        </div>
-      </div>
-
-      {/* Users List */}
-      <div className="flex flex-col">
-        {filteredUsers.map((user) => (
-          <div
-            key={user._id}
-            onClick={() => {
-              setSelectedUser(user);
-
-              // Remove unseen messages for selected user
-              if (unseenMessages[user._id]) {
-                setUnseenMessages((prev) => ({
-                  ...prev,
-                  [user._id]: 0,
-                }));
-              }
-            }}
-            className={`relative flex items-center gap-2 p-2 pl-4 rounded cursor-pointer max-sm:text-sm ${
-              selectedUser?._id === user._id
-               ? selectedBg
-                 : ""
+        {/* Tab Switcher (Chats vs Calls) */}
+        <div className="flex border-b border-gray-500/30 mt-4 mb-2">
+          <button
+            onClick={() => setActiveTab("chats")}
+            className={`flex-1 py-2 text-xs font-bold border-b-2 transition-all cursor-pointer ${
+              activeTab === "chats"
+                ? "border-violet-500 text-violet-400"
+                : "border-transparent text-gray-400 hover:text-gray-200"
             }`}
           >
+            💬 Chats
+          </button>
+          <button
+            onClick={() => setActiveTab("calls")}
+            className={`flex-1 py-2 text-xs font-bold border-b-2 transition-all cursor-pointer ${
+              activeTab === "calls"
+                ? "border-violet-500 text-violet-400"
+                : "border-transparent text-gray-400 hover:text-gray-200"
+            }`}
+          >
+            📞 Calls
+          </button>
+        </div>
+
+        {/* Search Box (Only shown under Chats tab) */}
+        {activeTab === "chats" && (
+          <div className={`${searchBg} rounded-full flex items-center gap-2 py-2.5 px-4 mt-3 transition-all duration-300`}>
             <img
-              src={user.profilePic || assets.avatar_icon}
-              alt={user.fullName}
-              className="w-[35px] aspect-square rounded-full"
+              src={assets.search_icon}
+              alt="search"
+              className="w-3"
             />
 
-            <div className="flex flex-col leading-5">
-              <p className={textColor}>{user.fullName}</p>
-
-              {typingUser === user._id ? (
-    <span className="text-blue-500 text-xs font-medium">
-        Typing...
-    </span>
-) : onlineUsers.includes(user._id) ? (
-    <span className="text-green-400 text-xs">
-        Online
-    </span>
-) : (
-    <span className="text-neutral-400 text-xs">
-        Offline
-    </span>
-)}
-            </div>
-
-            {unseenMessages[user._id] > 0 && (
-              <p className="absolute top-4 right-4 text-xs h-5 w-5 flex justify-center items-center rounded-full bg-violet-500 text-white">
-                {unseenMessages[user._id]}
-              </p>
-            )}
+            <input
+              type="text"
+              placeholder="Search User..."
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              className={`bg-transparent border-none outline-none text-xs flex-1 ${inputClass}`}
+            />
           </div>
-        ))}
+        )}
       </div>
+
+      {/* Main Content Area */}
+      {activeTab === "chats" ? (
+        <div className="flex flex-col">
+          {filteredUsers.map((user) => (
+            <div
+              key={user._id}
+              onClick={() => {
+                setSelectedUser(user);
+
+                // Remove unseen messages for selected user
+                if (unseenMessages[user._id]) {
+                  setUnseenMessages((prev) => ({
+                    ...prev,
+                    [user._id]: 0,
+                  }));
+                }
+              }}
+              className={`relative flex items-center gap-2 p-2 pl-4 rounded cursor-pointer max-sm:text-sm ${
+                selectedUser?._id === user._id
+                 ? selectedBg
+                   : ""
+              }`}
+            >
+              <img
+                src={user.profilePic || assets.avatar_icon}
+                alt={user.fullName}
+                className="w-[35px] aspect-square rounded-full"
+              />
+
+              <div className="flex flex-col leading-5">
+                <p className={textColor}>{user.fullName}</p>
+
+                {typingUser === user._id ? (
+                  <span className="text-blue-500 text-xs font-medium">
+                      Typing...
+                  </span>
+                ) : onlineUsers.includes(user._id) ? (
+                  <span className="text-green-400 text-xs">
+                      Online
+                  </span>
+                ) : (
+                  <span className="text-neutral-400 text-xs">
+                      Offline
+                  </span>
+                )}
+              </div>
+
+              {unseenMessages[user._id] > 0 && (
+                <p className="absolute top-4 right-4 text-xs h-5 w-5 flex justify-center items-center rounded-full bg-violet-500 text-white">
+                  {unseenMessages[user._id]}
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+      ) : (
+        <CallHistory />
+      )}
     </div>
   );
 };

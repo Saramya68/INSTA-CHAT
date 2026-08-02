@@ -20,7 +20,8 @@ const UserSchema=new mongoose.Schema({
     },
     bio:{
         type:String,
-    }
+        require:true
+    }``
 
 },{timestamps:true})
 const User=mongoose.model('user',UserSchema)

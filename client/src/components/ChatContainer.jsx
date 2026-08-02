@@ -6,6 +6,7 @@
   import { ChatContext } from "../../context/ChatContext";
   import { AuthContext } from "../../context/AuthContext";
   import { ThemeContext } from "../../context/ThemeContext";
+  import VideoCallButton from "./VideoCallButton";
   const ChatContainer = () => {
     const {
       messages,
@@ -128,14 +129,13 @@
               <span className="w-2 h-2 rounded-full bg-green-500"></span>
             )}
           </p>
-         
 
-          
+          <VideoCallButton />
 
           <img
             src={assets.help_icon}
             alt=""
-            className="max-md:hidden max-w-5"
+            className="max-md:hidden max-w-5 ml-1"
           />
         </div>
 

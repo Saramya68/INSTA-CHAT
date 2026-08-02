@@ -2,6 +2,8 @@ import React, { useContext } from "react";
 import SideBar from "../components/SideBar";
 import ChatContainer from "../components/ChatContainer";
 import RightSideBar from "../components/RightSideBar";
+import IncomingCallModal from "../components/IncomingCallModal";
+import VideoCallWindow from "../components/VideoCallWindow";
 import { ChatContext } from "../../context/ChatContext";
 import { ThemeContext } from "../../context/ThemeContext";
 
@@ -17,6 +19,10 @@ const HomePage = () => {
       : "bg-gradient-to-br from-sky-100 via-white to-blue-100"
   }`}
 >
+      {/* Global Video Calling Modals */}
+      <IncomingCallModal />
+      <VideoCallWindow />
+
       {/* Theme Toggle */}
       <div className="absolute top-5 right-5 z-50 flex flex-col items-center gap-1">
         <button

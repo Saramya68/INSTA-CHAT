@@ -5,17 +5,19 @@ import App from './App.jsx'
 import {BrowserRouter} from 'react-router-dom'
 import { AuthProvider } from '../context/AuthContext.jsx'
 import { ChatProvider } from '../context/ChatContext.jsx'
+import { VideoCallProvider } from '../context/VideoCallContext.jsx'
 import ThemeProvider from '../context/ThemeContext.jsx'
 
 createRoot(document.getElementById('root')).render(
  <ThemeProvider>
  <BrowserRouter>
  <AuthProvider>
-   <ChatProvider>
-      <App />
-      </ChatProvider>
-   </AuthProvider>
- </BrowserRouter>,
+   <VideoCallProvider>
+     <ChatProvider>
+       <App />
+     </ChatProvider>
+   </VideoCallProvider>
+ </AuthProvider>
+ </BrowserRouter>
  </ThemeProvider>
-   
 )
