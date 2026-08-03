@@ -18,7 +18,7 @@ app.use(cors());
 // Initialize socket.io server
 export const io = new Server(server, {
     cors: {
-        origin: "*"
+        origin: "https://instachatapp-nine.vercel.app/login"
     }
 });
 
